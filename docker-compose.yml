@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: trade-postgres
+    environment:
+      POSTGRES_USER: trade_user
+      POSTGRES_PASSWORD: trade_pass
+      POSTGRES_DB: temporal
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  temporal:
+    image: temporalio/auto-setup:1.23
+    container_name: temporal
+    environment:
+      DB: postgresql
+      POSTGRES_USER: trade_user
+      POSTGRES_PWD: trade_pass
+      POSTGRES_SEEDS: postgres
+      POSTGRES_DB: temporal
+      POSTGRES_VISIBILITY_DB: temporal_visibility
+    ports:
+      - "7233:7233"
+    depends_on:
+      - postgres
+
+  temporal-ui:
+    image: temporalio/ui:2.25.0
+    container_name: temporal-ui
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+    ports:
+      - "8233:8080"
+    depends_on:
+      - temporal
+
+volumes:
+  postgres_data:

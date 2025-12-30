@@ -2,6 +2,7 @@ package com.example.orderservice.temporal.config;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
+import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,7 +11,11 @@ public class TemporalConfig {
 
     @Bean
     public WorkflowServiceStubs workflowServiceStubs() {
-        return WorkflowServiceStubs.newLocalServiceStubs();
+        return WorkflowServiceStubs.newServiceStubs(
+                WorkflowServiceStubsOptions.newBuilder()
+                        .setTarget("localhost:7233")
+                        .build()
+        );
     }
 
     @Bean

@@ -1,2 +1,15 @@
 server:
   port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/trade_db
+    username: trade_user
+    password: trade_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
